@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Theme Switch</title>
+    <style>
+        :root {
+            --bg: #fafafa;
+            --text: #222;
+            --primary: #6c5ce7;
+            --surface: #fff;
+            --transition: 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .dark-mode {
+            --bg: #0f0e15;
+            --text: #f8f8f8;
+            --primary: #a991f5;
+            --surface: #1a1820;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', system-ui, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            transition: var(--transition);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .quantum-container {
+            width: min(90vw, 800px);
+            position: relative;
+        }
+
+        .quantum-switch {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            width: 80px;
+            height: 40px;
+            background: var(--surface);
+            border-radius: 100px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            overflow: hidden;
+            transition: var(--transition);
+            z-index: 1000;
+            border: 2px solid var(--primary);
+        }
+
+        .quantum-switch:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .quantum-switch::before {
+            content: '';
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            top: 4px;
+            left: 4px;
+            transition: var(--transition);
+            transform: translateX(0);
+            will-change: transform;
+        }
+
+        .dark-mode .quantum-switch::before {
+            transform: translateX(40px);
+        }
+
+        .quantum-switch::after {
+            content: '☀️';
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: var(--transition);
+            opacity: 1;
+        }
+
+        .dark-mode .quantum-switch::after {
+            opacity: 0;
+            transform: translateY(-50%) translateX(-20px);
+        }
+
+        .quantum-switch span {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: var(--transition);
+            opacity: 0;
+        }
+
+        .dark-mode .quantum-switch span {
+            opacity: 1;
+            transform: translateY(-50%);
+        }
+
+        .quantum-card {
+            background: var(--surface);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+            transform-origin: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dark-mode .quantum-card {
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .quantum-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: var(--primary);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 0 0 1rem;
+            background: linear-gradient(90deg, var(--primary), #a991f5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transition: var(--transition);
+        }
+
+        p {
+            font-size: 1.2rem;
+            max-width: 60ch;
+            opacity: 0.9;
+        }
+
+        .quantum-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--primary);
+            opacity: 0.1;
+            border-radius: 50%;
+            filter: blur(20px);
+            transition: var(--transition);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .quantum-card {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quantum-particles" id="particles"></div>
+    
+    <div class="quantum-container">
+        <div class="quantum-card">
+            <h1>Quantum UI Experience</h1>
+            <p>This isn't just a theme switcher. It's a dimensional gateway that transforms reality through carefully crafted transitions and immersive visual feedback.</p>
+            <p>Toggle the quantum switch to experience the future of UI design.</p>
+        </div>
+    </div>
+
+    <div class="quantum-switch" id="themeSwitch">
+        <span>🌙</span>
+    </div>
+
+    <script>
+        // Theme switching with quantum physics-like effects
+        const themeSwitch = document.getElementById('themeSwitch');
+        const body = document.body;
+        const particlesContainer = document.getElementById('particles');
+        
+        // Create quantum particles
+        function createParticles() {
+            particlesContainer.innerHTML = '';
+            const particleCount = window.innerWidth < 768 ? 15 : 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random properties
+                const size = Math.random() * 200 + 50;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const delay = Math.random() * 5;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${x}%`;
+                particle.style.top = `${y}%`;
+                particle.style.transitionDelay = `${delay}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Initialize
+        createParticles();
+        window.addEventListener('resize', createParticles);
+        
+        // Quantum toggle effect
+        themeSwitch.addEventListener('click', () => {
+            // Play with physics during transition
+            body.classList.toggle('dark-mode');
+            
+            // Store preference
+            const isDark = body.classList.contains('dark-mode');
+            localStorage.setItem('quantum-theme', isDark ? 'dark' : 'light');
+            
+            // Add quantum ripple effect
+            const ripple = document.createElement('div');
+            ripple.style.position = 'fixed';
+            ripple.style.width = '10px';
+            ripple.style.height = '10px';
+            ripple.style.background = 'var(--primary)';
+            ripple.style.borderRadius = '50%';
+            ripple.style.pointerEvents = 'none';
+            ripple.style.transform = 'translate(-50%, -50%)';
+            ripple.style.opacity = '0.5';
+            ripple.style.zIndex = '10000';
+            ripple.style.left = `${event.clientX}px`;
+            ripple.style.top = `${event.clientY}px`;
+            document.body.appendChild(ripple);
+            
+            // Animate ripple
+            const scale = Math.max(window.innerWidth, window.innerHeight) / 5;
+            ripple.animate([
+                { transform: `translate(-50%, -50%) scale(0)`, opacity: 0.5 },
+                { transform: `translate(-50%, -50%) scale(${scale})`, opacity: 0 }
+            ], {
+                duration: 1000,
+                easing: 'cubic-bezier(0, 0.2, 0.8, 1)'
+            });
+            
+            setTimeout(() => ripple.remove(), 1000);
+        });
+        
+        // Check for saved preference
+        if (localStorage.getItem('quantum-theme') === 'dark') {
+            body.classList.add('dark-mode');
+        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            body.classList.add('dark-mode');
+        }
+    </script>
+</body>
+</html>
